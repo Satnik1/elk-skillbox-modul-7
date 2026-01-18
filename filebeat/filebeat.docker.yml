@@ -1,0 +1,44 @@
+filebeat.inputs:
+  - type: filestream
+    id: grafana-target
+    enabled: true
+    paths:
+      - /var/log/grafana/grafana.log*
+    fields:
+      service: grafana
+  
+  - type: filestream
+    id: nginx-target
+    enabled: true
+    paths:
+      - /var/log/nginx/*.log
+    fields:
+      service: nginx
+
+  - type: filestream
+    id: auth-target
+    enabled: true
+    paths:
+      - /var/log/auth.log*
+    fields:
+      service: sudo
+
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+- add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS:https://es01:9200}'
+  username: '${ELASTIC_USERNAME:elastic}'
+  password: '${ELASTIC_PASSWORD:qwerty123}'
+  ssl.enabled: true
+  ssl.certificate_authorities: ["/usr/share/filebeat/certs/ca/ca.crt"]
