@@ -139,11 +139,13 @@ services:
     ports:
       - ${KIBANA_PORT}:5601
     environment:
+      - SERVER_HOST=0.0.0.0
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=https://es01:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=2tDaBXnZ+GPvVoSwWh2xi9fw/sg09rVraz/S8IXcf6Q=
     mem_limit: ${MEM_LIMIT}
     healthcheck:
       test:
